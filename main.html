@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legend Yang - Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Scroll Progress Bar */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(to right, #ef4444, #f87171, #fca5a5);
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+
+        /* Mouse Spotlight */
+        #spotlight {
+            position: fixed;
+            width: 1200px;
+            height: 1200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 30;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s;
+        }
+
+        /* Grid Background */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            opacity: 0.2;
+            z-index: 0;
+            background-image: 
+                linear-gradient(rgba(239, 68, 68, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(239, 68, 68, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* Hero Section */
+        header {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom right, rgba(127, 29, 29, 0.2), #000, rgba(15, 23, 42, 0.5));
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 1200px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .terminal-text {
+            color: #ef4444;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #ef4444, #f87171, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 3s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: #cbd5e1;
+            margin: 2rem 0;
+            font-weight: 300;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .contact-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+            overflow: hidden;
+        }
+
+        .contact-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: #ef4444;
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+            z-index: -1;
+        }
+
+        .contact-btn:hover {
+            border-color: #ef4444;
+        }
+
+        .contact-btn:hover::before {
+            transform: translateX(0);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            color: #ef4444;
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-btn:hover {
+            color: #fff;
+        }
+
+        .nav-btn.active {
+            color: #ef4444;
+        }
+
+        .nav-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #ef4444;
+            animation: pulse 2s infinite;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        section {
+            margin-bottom: 10rem;
+            opacity: 0;
+            transform: translateY(50px) perspective(1000px) rotateX(10deg);
+            transition: opacity 0.8s, transform 0.8s;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0) perspective(1000px) rotateX(0deg);
+        }
+
+        section.warping {
+            transform: translateY(-100px) perspective(1000px) rotateX(-15deg) scale(0.9);
+            opacity: 0.3;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 900;
+        }
+
+        .section-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, rgba(239, 68, 68, 0.5), transparent);
+        }
+
+        /* Cards */
+        .card {
+            position: relative;
+            background: linear-gradient(to bottom right, #0f172a, #000);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.5s;
+            transform-style: preserve-3d;
+        }
+
+        .card:hover {
+            border-color: rgba(239, 68, 68, 0.5);
+            transform: scale(1.02);
+        }
+
+        .card.warping {
+            transform: perspective(1000px) rotateX(-8deg) translateY(-20px) scale(0.95);
+            opacity: 0.5;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, #ef4444, transparent);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card h3 {
+            font-size: 1.875rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-subtitle {
+            color: #ef4444;
+            font-family: 'Courier New', monospace;
+            font-size: 1.125rem;
+        }
+
+        .card-date {
+            color: #94a3b8;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.25rem 1rem;
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card li {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            color: #cbd5e1;
+        }
+
+        .card li::before {
+            content: '▸';
+            color: #ef4444;
+            flex-shrink: 0;
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* max 2 columns */
+            gap: 2rem; /* space between cards */
+            padding-bottom: 1rem;
+        }
+
+        .project-card {
+            display: flex;             /* make card a flex container */
+            flex-direction: column;    /* stack items vertically */
+            justify-content: flex-start; /* keep content at top initially */
+            position: relative;
+            background: linear-gradient(to bottom right, #0f172a, #000);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            transition: all 0.5s;
+            transform-style: preserve-3d;
+            height: 100%;              /* ensure flex can stretch cards */
+        }
+
+        .project-tags {
+            margin-top: auto;          /* pushes tags to the bottom */
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .project-card-link {
+            display: block;       /* makes the whole card area clickable */
+            text-decoration: none; /* remove underline */
+            color: inherit;       /* keep text color */
+        }
+
+        .project-card-link .project-card {
+            transition: all 0.3s;
+        }
+
+        .project-card-link:hover .project-card {
+            transform: scale(1.02);
+            box-shadow: 0 20px 60px rgba(239, 68, 68, 0.2);
+        }
+
+        .project-card li {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            color: #cbd5e1;
+        }
+
+        .project-card li::before {
+            content: '▸';
+            color: #ef4444;
+            flex-shrink: 0;
+        }
+
+        .project-card:hover {
+            border-color: #ef4444;
+            box-shadow: 0 20px 60px rgba(239, 68, 68, 0.2);
+            transform: scale(1.02);
+        }
+
+        .project-card.warping {
+            transform: perspective(1000px) rotateX(-8deg) translateY(-20px) scale(0.95);
+            opacity: 0.5;
+        }
+        .coursework-title {
+            margin-bottom: 8px; 
+            font-weight: bold;
+        }
+        .project-status {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            font-family: 'Courier New', monospace;
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 0.25rem 0.75rem;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .project-card h3 {
+            font-size: 1.5rem;
+            margin: 2rem 0 0.5rem 0;
+        }
+
+        .project-desc {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            color: #94a3b8;
+            padding: 0.25rem 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+
+        /* Skills */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .skill-category h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .skill-category h3::before {
+            content: '';
+            width: 4px;
+            height: 1.5rem;
+            background: #ef4444;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .skill-tag {
+            padding: 0.5rem 1.25rem;
+            background: #000;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+            cursor: default;
+        }
+
+        .skill-tag:hover {
+            background: #ef4444;
+            color: #fff;
+            transform: scale(1.1);
+        }
+        
+        .learn-more-btn {
+            margin-top: 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 0.25rem 0.75rem;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            font-family: 'Courier New', monospace;
+            font-weight: 500;
+            text-align: center;
+            transition: background-color 0.2s, transform 0.2s;
+            cursor: pointer;
+        }
+
+        .learn-more-btn:hover {
+            background: rgba(239, 68, 68, 0.2); /* slightly more visible */
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); /* subtle glow */
+            color: #fff; /* text turns white for contrast */
+            border-color: #ef4444; /* stronger border */
+        }
+
+
+        /* Footer */
+        footer {
+            background: #000;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-top: 8rem;
+        }
+
+        footer p {
+            color: #94a3b8;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        @keyframes gradient {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                justify-content: center;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll Progress -->
+    <div id="scroll-progress"></div>
+
+    <!-- Mouse Spotlight -->
+    <div id="spotlight"></div>
+
+    <!-- Grid Background -->
+    <div class="grid-bg"></div>
+
+    <!-- Hero Section -->
+    <header>
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <h1>
+                LEGEND
+                <div class="gradient-text">YANG</div>
+            </h1>
+            <div class="contact-links">
+                <a href="mailto:thelegendy@g.ucla.edu" class="contact-btn">
+                    Email
+                </a>
+                <a href="https://linkedin.com/in/legendyang" class="contact-btn" target="_blank">
+                    LinkedIn
+                </a>
+                <a href="https://github.com/Legaand" class="contact-btn">
+                    Github
+                </a>
+            </div>
+        </div>
+        <div class="scroll-indicator">▼</div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <button class="nav-btn" onclick="scrollToSection('about')">Education</button>
+            <button class="nav-btn" onclick="scrollToSection('experience')">Experience</button>
+            <button class="nav-btn" onclick="scrollToSection('projects')">Projects</button>
+            <button class="nav-btn" onclick="scrollToSection('research')">Research</button>
+            <button class="nav-btn" onclick="scrollToSection('skills')">Skills</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Education Section -->
+        <section id="about">
+            <div class="section-header">
+                <h2>Education</h2>
+                <div class="section-line"></div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h3>UCLA</h3>
+                        <div class="card-subtitle">B.S. Mathematics of Computation</div>
+                    </div>
+                    <div class="card-date">2025 - 2029</div>
+                </div>
+                <p class="coursework-title">Relevant Coursework</p>
+                <ul>
+                    <li>Introduction to Programming (C++)</li>
+                    <li>Data, Justice, and Society — Exploring ethical implications of AI and data systems</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h3>Singapore American School</h3>
+                        <div class="card-subtitle">High School Diploma</div>
+                        <p style="font-family: 'Courier New', monospace; margin-top: 0.5rem;">GPA: 4.41</p>
+                    </div>
+                    <div class="card-date">2021 - 2025</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience">
+            <div class="section-header">
+                <h2>Experience</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h3>Engineer Intern</h3>
+                        <div class="card-subtitle">Futurum Academy Singapore</div>
+                        <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.25rem;">Singapore</p>
+                    </div>
+                    <div class="card-date">Aug 2024 - Dec 2024</div>
+                </div>
+                <ul>
+                    <li>Mentored two competitive robotics teams at a leading Coding & Robotics academy</li>
+                    <li>Enhanced student performance in VEX V5 Robotics Competition through mechanical design guidance</li>
+                    <li>Facilitated CAD to enhance students' engineering and programming proficiency</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h3>Self-Employed Developer</h3>
+                        <div class="card-subtitle">Mobile App Development</div>
+                        <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.25rem;">Singapore</p>
+                    </div>
+                    <div class="card-date">Sept 2023 - Mar 2024</div>
+                </div>
+                <ul>
+                    <li>Designed and developed task/learning management iOS app using Swift</li>
+                    <li>Integrated note-taking, photo organization, and progress tracking features</li>
+                    <li>Implemented data persistence with user-centered design principles</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h3>Director of Singapore Chapter</h3>
+                        <div class="card-subtitle">San Antonio Math Include</div>
+                        <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.25rem;">Remote</p>
+                    </div>
+                    <div class="card-date">May - Sept 2023</div>
+                </div>
+                <ul>
+                    <li>Launched and managed SaMi's first Singapore chapter across Singapore and China</li>
+                    <li>Coordinated 7 volunteer tutors teaching 30+ students across 7 STEM disciplines</li>
+                    <li>Partnered with 5 schools and 3 organizations for equitable STEM education</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects">
+            <div class="section-header">
+                <h2>Projects</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="projects-grid">
+                <a href="https://faculty-project-nextjs.vercel.app/search_barn" target="_blank" class="project-card-link"> 
+                    <div class="project-card">
+                        <div class="project-status">Nov. 2025 – Current</div>
+                        <h3>Research Interest Matching</h3>
+                        <ul>
+                            <li>Engineered a Python-based system to web scrape research interests of university professors from department websites</li>
+                            <li>Designed a text-processing pipeline that cleans, segments, and embeds unstructured text to compare research topics</li>
+                            <li>Similarity search feature that allows users to find professors with research interests aligned to their own</li>
+                        </ul>
+                        <div class="project-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">NLP</span>
+                            <span class="tag">Web Scraping</span>
+                        </div>
+                        <div class="learn-more-btn">Learn More</div>
+                    </div>
+                </a>
+
+
+                <div class="project-card">
+                    <div class="project-status">Oct. 2025 – Current</div>
+                    <h3>Factors Influencing Envy</h3>
+                    <ul>
+                        <li>Researched and sourced publicly available datasets to study factors contributing to envy, including personality traits and internet usage patterns.</li>
+                        <li>Cleaned, processed, and analyzed data using Python and pandas to identify correlations and patterns</li>
+                        <li>Visualized insights to interpret relationships between variables and highlight key factors influencing envy</li>
+                    </ul>
+                    <div class="project-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">Pandas</span>
+                        <span class="tag">Seaborn</span>
+                        <span class="tag">Data Visualization</span>
+                        <span class="tag">Exploratory Data Analysis</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-status">Sept. 2025 – Current</div>
+                    <h3>Double Major Completion Optimization</h3>
+                    <ul>
+                        <li>Developed a Python-based data pipeline to web scrape UCLA major requirements.</li>
+                        <li>Processed and restructured unorganized text data into a structured, readable format using the Gemini API, enabling clear identification of required courses and dependencies.</li>
+                        <li>Determine the most efficient path to complete a double major, helping students assess course load, overlap, and feasibility.</li>
+                    </ul>
+                    <div class="project-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">Gemini API</span>
+                        <span class="tag">Optimization</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Research Section -->
+        <section id="research">
+            <div class="section-header">
+                <h2>Research</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="card" style="border-color: rgba(239, 68, 68, 0.3);">
+                <div class="card-header">
+                    <div>
+                        <h3>Student Researcher</h3>
+                        <div class="card-subtitle">National University of Singapore</div>
+                        <p style="color: #94a3b8; font-size: 0.875rem; margin-top: 0.5rem;">Supervised by Liang Zhenkai, Associate Professor of Computer Science</p>
+                    </div>
+                    <div class="card-date">June - Aug 2025</div>
+                </div>
+                <ul>
+                    <li>Collaborated in an AI-driven finance research project, developing AI agents for stock price prediction and decision-making using Python</li>
+                    <li>Built and deployed a web-based AI agent platform, enabling benchmarking against code implementations</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2rem;">
+                    Publications
+                </h3>
+                
+                <div>
+                    <p style="color: #e2e8f0; margin-bottom: 1rem; line-height: 1.7;">
+                        <em style="color: #bbc0c7;">Tang, Y., Li, Z., Yu, J., & </em><strong>Yang, L.</strong> (2025). 
+                        <em style="color: #bbc0c7;">A Simple Approach of Chinese Poetry Generation Using Pre-trained LLMs. 106–112. https://doi.org/10.1145/3726101.3726121</em>.
+                    </p>
+                    <ul style="list-style: disc; margin-left: 1.5rem; color: #94a3b8; font-size: 0.875rem;">
+                        <li style="margin-bottom: 0.5rem;">Developed Python scripts for data preprocessing and consistency improvement</li>
+                        <li>Leveraged LLaMA-Factory for model fine-tuning in poetry generation</li>
+                    </ul>
+                </div>
+                
+                <div style="padding-top: 2rem;">
+                    <p style="color: #e2e8f0; line-height: 1.7;">
+                        <strong>Yang, L.</strong> (2024). 
+                        <em style="color: #94a3b8;">Resilience enhancement for interdependent power systems by AI-assisted disaster response. Applied and Computational Engineering, 95, 216-229. https://doi.org/10.54254/2755-2721/95/20241640</em>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills">
+            <div class="section-header">
+                <h2>Skills</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="skills-grid">
+                <div class="card skill-category">
+                    <h3>Programming Languages</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">SQL</span>
+                        <span class="skill-tag">C++</span>
+                        <span class="skill-tag">Java</span>
+                    </div>
+                </div>
+
+                <div class="card skill-category">
+                    <h3>Frameworks & Libraries</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">NumPy</span>
+                        <span class="skill-tag">Pandas</span>
+                        <span class="skill-tag">Seaborn</span>
+                        <span class="skill-tag">BeautifulSoup</span>
+                        <span class="skill-tag">FastAPI</span>
+                        <span class="skill-tag">Next.js</span>
+                    </div>
+                </div>
+
+                <div class="card skill-category">
+                    <h3>Databases & Backend</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">MySQL</span>
+                        <span class="skill-tag">SQLAlchemy</span>
+                    </div>
+                </div>
+
+                <div class="card skill-category">
+                    <h3>AI Tools & APIs</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Gemini API</span>
+                        <span class="skill-tag">Coze</span>
+                        <span class="skill-tag">LLaMA</span>            
+                    </div>
+                </div>
+
+                <div class="card skill-category">
+                    <h3>Developer Tools</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Git</span>
+                        <span class="skill-tag">GitHub</span>
+                        <span class="skill-tag">Vercel</span>
+                        <span class="skill-tag">Render</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <!-- <footer>
+        <p style="font-size: 1.25rem; color: #fff; margin-bottom: 0.5rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto;">Legend Yang</p>
+    </footer> -->
+
+    <script>
+        // Scroll Progress
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('scroll-progress').style.width = scrolled + '%';
+        });
+
+        // Mouse Spotlight
+        const spotlight = document.getElementById('spotlight');
+        document.addEventListener('mousemove', (e) => {
+            spotlight.style.left = e.clientX + 'px';
+            spotlight.style.top = e.clientY + 'px';
+        });
+
+        // Smooth Scroll
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Intersection Observer for fade-in
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Active nav highlighting
+        window.addEventListener('scroll', () => {
+            const sections = ['about', 'experience', 'projects', 'research', 'skills'];
+            const scrollPos = window.scrollY + 150;
+
+            sections.forEach(sectionId => {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    const offsetTop = section.offsetTop;
+                    const offsetHeight = section.offsetHeight;
+                    
+                    const navBtns = document.querySelectorAll('.nav-btn');
+                    if (scrollPos >= offsetTop && scrollPos < offsetTop + offsetHeight) {
+                        navBtns.forEach(btn => btn.classList.remove('active'));
+                        document.querySelector(`[onclick="scrollToSection('${sectionId}')"]`).classList.add('active');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
