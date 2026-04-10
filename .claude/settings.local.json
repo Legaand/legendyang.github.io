@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/thelegend/.claude/plugins/marketplaces/ui-ux-pro-max-skill/.claude/skills/ui-ux-pro-max/**)",
+      "Bash(python3 scripts/search.py \"portfolio personal developer dark premium minimal\" --design-system -p \"Legend Yang Portfolio\")",
+      "Bash(python3 scripts/search.py \"animation scroll motion interaction\" --domain ux -n 10)",
+      "Bash(python3 scripts/search.py \"dark mode premium developer\" --domain style -n 8)",
+      "Bash(python3 scripts/search.py \"dark cinematic premium\" --domain color -n 8)",
+      "Bash(python3 scripts/search.py \"dark cinematic technical precision\" --domain typography -n 8)",
+      "Bash(open:*)",
+      "Bash(python3:*)",
+      "Bash(xxd /Users/thelegend/Code/legendyang.github.io/CLAUDE.md)",
+      "Bash(git -C /Users/thelegend/Code/legendyang.github.io diff style.css)",
+      "Bash(git -C /Users/thelegend/Code/legendyang.github.io diff --cached style.css)",
+      "Bash(curl:*)"
+    ]
+  }
+}
